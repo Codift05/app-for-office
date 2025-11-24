@@ -1,0 +1,16 @@
+include: package:flutter_lints/flutter.yaml
+
+linter:
+  rules:
+    # Disable untuk sementara karena sudah ada mounted check manual
+    use_build_context_synchronously: false
+
+analyzer:
+  exclude:
+    - build/**
+    - "**/*.g.dart"
+    - "**/*.freezed.dart"
+    - lib/firebase_options.dart
+  errors:
+    # Tetap tampilkan sebagai info saja, bukan error
+    use_build_context_synchronously: info
