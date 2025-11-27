@@ -29,7 +29,9 @@ class _VerificationScreenState extends ConsumerState<VerificationScreen> {
       WidgetsBinding.instance.addPostFrameCallback((_) {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
-            content: Text('Laporan ini tidak memerlukan verifikasi. Status: ${widget.report.status.displayName}'),
+            content: Text(
+              'Laporan ini tidak memerlukan verifikasi. Status: ${widget.report.status.displayName}',
+            ),
             backgroundColor: Colors.orange,
           ),
         );
@@ -107,10 +109,7 @@ class _VerificationScreenState extends ConsumerState<VerificationScreen> {
                   ),
                   Text(
                     report.location,
-                    style: const TextStyle(
-                      fontSize: 16,
-                      color: Colors.white70,
-                    ),
+                    style: const TextStyle(fontSize: 16, color: Colors.white70),
                   ),
                   const SizedBox(height: 8),
                   Row(
@@ -463,8 +462,8 @@ class _VerificationScreenState extends ConsumerState<VerificationScreen> {
       final actions = ref.read(verificationActionsProvider);
       await actions.approveReport(
         widget.report,
-        notes: _notesController.text.trim().isEmpty 
-            ? null 
+        notes: _notesController.text.trim().isEmpty
+            ? null
             : _notesController.text.trim(),
       );
 

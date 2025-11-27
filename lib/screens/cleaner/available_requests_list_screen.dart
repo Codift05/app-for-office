@@ -29,7 +29,7 @@ class _AvailableRequestsListScreenState
 
     return CleanerBaseLayout(
       title: 'Permintaan Tersedia',
-      currentNavIndex: 2,
+      currentNavIndex: -1, // Not a navbar item
       actions: [
         // Filter button
         PopupMenuButton<String>(

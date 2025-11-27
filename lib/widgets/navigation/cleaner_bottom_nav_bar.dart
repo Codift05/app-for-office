@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import '../../core/theme/app_theme.dart';
 
-/// Modern clean bottom navigation bar for cleaner role
+/// Simple modern clean bottom navigation bar for cleaner role
 class CleanerBottomNavBar extends StatelessWidget {
   final int currentIndex;
   final Function(int) onTap;

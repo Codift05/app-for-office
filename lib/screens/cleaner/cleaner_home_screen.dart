@@ -16,7 +16,6 @@ import '../../providers/riverpod/notification_providers.dart';
 import '../../widgets/cleaner/stats_card_widget.dart';
 import '../../widgets/cleaner/tasks_overview_widget.dart';
 import '../../widgets/cleaner/recent_tasks_widget.dart';
-import '../../widgets/shared/drawer_menu_widget.dart';
 import '../../widgets/shared/custom_speed_dial.dart';
 import '../../widgets/navigation/cleaner_bottom_nav_bar.dart';
 
@@ -24,6 +23,7 @@ import './pending_reports_list_screen.dart';
 import './available_requests_list_screen.dart';
 import './my_tasks_screen.dart';
 import './create_cleaning_report_screen.dart';
+import './cleaner_inventory_screen.dart';
 
 class CleanerHomeScreen extends ConsumerStatefulWidget {
   const CleanerHomeScreen({super.key});
@@ -44,7 +44,6 @@ class _CleanerHomeScreenState extends ConsumerState<CleanerHomeScreen> {
     return Scaffold(
       key: _scaffoldKey,
       backgroundColor: Colors.grey[50],
-
       // ==================== APP BAR ====================
       appBar: AppBar(
         backgroundColor: AppTheme.primary,
@@ -53,57 +52,104 @@ class _CleanerHomeScreenState extends ConsumerState<CleanerHomeScreen> {
         actions: [
           _buildNotificationIcon(),
           IconButton(
-            icon: const Icon(Icons.menu, color: Colors.white),
-            onPressed: () => _scaffoldKey.currentState?.openEndDrawer(),
+            icon: const Icon(Icons.person_outline, color: Colors.white),
+            onPressed: () =>
+                Navigator.pushNamed(context, AppConstants.profileRoute),
+            tooltip: 'Profil',
+          ),
+          IconButton(
+            icon: const Icon(Icons.settings_outlined, color: Colors.white),
+            onPressed: () => Navigator.pushNamed(context, '/settings'),
+            tooltip: 'Pengaturan',
           ),
         ],
       ),
 
-      // ==================== DRAWER ====================
-      endDrawer: Drawer(child: _buildDrawer()),
-
       // ==================== BODY ====================
-      body: RefreshIndicator(
-        onRefresh: () async {
-          ref.invalidate(cleanerActiveReportsProvider);
-          ref.invalidate(cleanerAssignedRequestsProvider);
-          ref.invalidate(cleanerStatsProvider);
-          await Future.delayed(const Duration(milliseconds: 500));
-        },
-        child: CustomScrollView(
-          slivers: [
-            // ==================== HEADER ====================
-            SliverToBoxAdapter(child: _buildHeader()),
+      body: Stack(
+        children: [
+          // Main content
+          RefreshIndicator(
+            onRefresh: () async {
+              ref.invalidate(cleanerActiveReportsProvider);
+              ref.invalidate(cleanerAssignedRequestsProvider);
+              ref.invalidate(cleanerStatsProvider);
+              await Future.delayed(const Duration(milliseconds: 500));
+            },
+            child: CustomScrollView(
+              slivers: [
+                // ==================== HEADER ====================
+                SliverToBoxAdapter(child: _buildHeader()),
 
-            // ==================== STATS CARDS ====================
-            SliverToBoxAdapter(child: _buildStatsCards(cleanerStats)),
+                // ==================== STATS CARDS ====================
+                SliverToBoxAdapter(child: _buildStatsCards(cleanerStats)),
 
-            // ==================== TASKS OVERVIEW & RECENT ====================
-            SliverToBoxAdapter(
-              child: _buildRecentActivity(
-                activeReportsAsync,
-                assignedRequestsAsync,
-              ),
+                // ==================== TASKS OVERVIEW & RECENT ====================
+                SliverToBoxAdapter(
+                  child: _buildRecentActivity(
+                    activeReportsAsync,
+                    assignedRequestsAsync,
+                  ),
+                ),
+
+                // Bottom padding for navbar
+                const SliverToBoxAdapter(child: SizedBox(height: 120)),
+              ],
             ),
-
-            // Bottom padding for navbar
-            const SliverToBoxAdapter(child: SizedBox(height: 120)),
-          ],
-        ),
+          ),
+          // Floating navbar
+          Positioned(
+            left: 0,
+            right: 0,
+            bottom: 0,
+            child: CleanerBottomNavBar(currentIndex: 0, onTap: _onBottomNavTap),
+          ),
+          // FAB with fixed position
+          Positioned(
+            bottom: 36,
+            left: 0,
+            right: 0,
+            child: IgnorePointer(
+              ignoring: false,
+              child: Center(child: _buildSpeedDial()),
+            ),
+          ),
+        ],
       ),
-
-      // ==================== BOTTOM NAVBAR ====================
-      bottomNavigationBar: CleanerBottomNavBar(
-        currentIndex: 0,
-        onTap: (index) {
-          // Navigation handled by CleanerBottomNavBar internally
-        },
-      ),
-
-      // ==================== SPEED DIAL FAB ====================
-      floatingActionButton: _buildSpeedDial(),
-      floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
     );
+  }
+
+  // ==================== BOTTOM NAV TAP ====================
+
+  void _onBottomNavTap(int index) {
+    if (index == 0) return; // Already on home
+
+    Widget? targetScreen;
+    switch (index) {
+      case 1:
+        targetScreen = const MyTasksScreen();
+        break;
+      case 2:
+        targetScreen = const PendingReportsListScreen();
+        break;
+      case 3:
+        targetScreen = const CleanerInventoryScreen();
+        break;
+    }
+
+    if (targetScreen != null) {
+      Navigator.pushReplacement(
+        context,
+        PageRouteBuilder(
+          pageBuilder: (context, animation, secondaryAnimation) =>
+              targetScreen!,
+          transitionsBuilder: (context, animation, secondaryAnimation, child) {
+            return FadeTransition(opacity: animation, child: child);
+          },
+          transitionDuration: const Duration(milliseconds: 200),
+        ),
+      );
+    }
   }
 
   // ==================== NOTIFICATION ICON ====================
@@ -151,67 +197,6 @@ class _CleanerHomeScreenState extends ConsumerState<CleanerHomeScreen> {
           error: (e, _) => const SizedBox.shrink(),
         ),
       ],
-    );
-  }
-
-  // ==================== DRAWER MENU ====================
-
-  Widget _buildDrawer() {
-    return DrawerMenuWidget(
-      menuItems: [
-        DrawerMenuItem(
-          icon: Icons.home_outlined,
-          title: 'Beranda',
-          onTap: () => Navigator.pop(context),
-        ),
-        DrawerMenuItem(
-          icon: Icons.inventory_2,
-          title: 'Inventaris Alat',
-          onTap: () {
-            Navigator.pop(context);
-            Navigator.pushNamed(context, '/inventory');
-          },
-        ),
-        DrawerMenuItem(
-          icon: Icons.task_alt,
-          title: 'Tugas Saya',
-          onTap: () {
-            Navigator.pop(context);
-            Navigator.push(
-              context,
-              MaterialPageRoute(builder: (context) => const MyTasksScreen()),
-            );
-          },
-        ),
-        DrawerMenuItem(
-          icon: Icons.history,
-          title: 'Riwayat Laporan',
-          onTap: () {
-            Navigator.pop(context);
-            ScaffoldMessenger.of(
-              context,
-            ).showSnackBar(const SnackBar(content: Text('Fitur segera hadir')));
-          },
-        ),
-        DrawerMenuItem(
-          icon: Icons.person_outline,
-          title: 'Profil',
-          onTap: () {
-            Navigator.pop(context);
-            Navigator.pushNamed(context, AppConstants.profileRoute);
-          },
-        ),
-        DrawerMenuItem(
-          icon: Icons.settings_outlined,
-          title: 'Pengaturan',
-          onTap: () {
-            Navigator.pop(context);
-            Navigator.pushNamed(context, '/settings');
-          },
-        ),
-      ],
-      onLogout: () => _handleLogout(),
-      roleTitle: 'Petugas Kebersihan',
     );
   }
 
@@ -376,7 +361,10 @@ class _CleanerHomeScreenState extends ConsumerState<CleanerHomeScreen> {
           icon: Icons.inventory_2,
           label: 'Inventaris Alat',
           backgroundColor: Colors.blue,
-          onTap: () => Navigator.pushNamed(context, '/inventory'),
+          onTap: () => Navigator.pushReplacement(
+            context,
+            MaterialPageRoute(builder: (_) => const CleanerInventoryScreen()),
+          ),
         ),
 
         // Tugas Saya (Purple)
