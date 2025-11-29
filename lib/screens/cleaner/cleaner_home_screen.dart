@@ -3,13 +3,11 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 
 import '../../core/theme/app_theme.dart';
 import '../../core/constants/app_constants.dart';
 import '../../core/utils/date_formatter.dart';
 import '../../models/report.dart';
-import '../../providers/riverpod/auth_providers.dart';
 import '../../providers/riverpod/cleaner_providers.dart';
 import '../../providers/riverpod/notification_providers.dart';
 
@@ -44,27 +42,6 @@ class _CleanerHomeScreenState extends ConsumerState<CleanerHomeScreen> {
     return Scaffold(
       key: _scaffoldKey,
       backgroundColor: Colors.grey[50],
-      // ==================== APP BAR ====================
-      appBar: AppBar(
-        backgroundColor: AppTheme.primary,
-        elevation: 0,
-        automaticallyImplyLeading: false,
-        actions: [
-          _buildNotificationIcon(),
-          IconButton(
-            icon: const Icon(Icons.person_outline, color: Colors.white),
-            onPressed: () =>
-                Navigator.pushNamed(context, AppConstants.profileRoute),
-            tooltip: 'Profil',
-          ),
-          IconButton(
-            icon: const Icon(Icons.settings_outlined, color: Colors.white),
-            onPressed: () => Navigator.pushNamed(context, '/settings'),
-            tooltip: 'Pengaturan',
-          ),
-        ],
-      ),
-
       // ==================== BODY ====================
       body: Stack(
         children: [
@@ -203,8 +180,6 @@ class _CleanerHomeScreenState extends ConsumerState<CleanerHomeScreen> {
   // ==================== HEADER ====================
 
   Widget _buildHeader() {
-    final user = FirebaseAuth.instance.currentUser;
-    final userProfileAsync = ref.watch(currentUserProfileProvider);
     final hour = DateTime.now().hour;
     String greeting;
 
@@ -219,7 +194,7 @@ class _CleanerHomeScreenState extends ConsumerState<CleanerHomeScreen> {
     }
 
     return Container(
-      padding: const EdgeInsets.all(20),
+      padding: const EdgeInsets.fromLTRB(20, 48, 20, 20),
       decoration: BoxDecoration(
         color: AppTheme.primary,
         borderRadius: const BorderRadius.only(
@@ -230,35 +205,35 @@ class _CleanerHomeScreenState extends ConsumerState<CleanerHomeScreen> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
+          Row(
+            mainAxisAlignment: MainAxisAlignment.end,
+            children: [
+              _buildNotificationIcon(),
+              IconButton(
+                icon: const Icon(Icons.person_outline, color: Colors.white),
+                onPressed: () =>
+                    Navigator.pushNamed(context, AppConstants.profileRoute),
+                tooltip: 'Profil',
+              ),
+              IconButton(
+                icon: const Icon(Icons.settings_outlined, color: Colors.white),
+                onPressed: () => Navigator.pushNamed(context, '/settings'),
+                tooltip: 'Pengaturan',
+              ),
+            ],
+          ),
+          const SizedBox(height: 8),
           Text(
             greeting,
             style: const TextStyle(fontSize: 16, color: Colors.white70),
           ),
           const SizedBox(height: 4),
-          userProfileAsync.when(
-            data: (profile) => Text(
-              profile?.displayName ?? user?.displayName ?? 'Petugas Kebersihan',
-              style: const TextStyle(
-                fontSize: 24,
-                fontWeight: FontWeight.bold,
-                color: Colors.white,
-              ),
-            ),
-            loading: () => const Text(
-              'Petugas Kebersihan',
-              style: TextStyle(
-                fontSize: 24,
-                fontWeight: FontWeight.bold,
-                color: Colors.white,
-              ),
-            ),
-            error: (e, _) => const Text(
-              'Petugas Kebersihan',
-              style: TextStyle(
-                fontSize: 24,
-                fontWeight: FontWeight.bold,
-                color: Colors.white,
-              ),
+          Text(
+            'Petugas Kebersihan',
+            style: const TextStyle(
+              fontSize: 24,
+              fontWeight: FontWeight.bold,
+              color: Colors.white,
             ),
           ),
           const SizedBox(height: 4),
@@ -418,45 +393,5 @@ class _CleanerHomeScreenState extends ConsumerState<CleanerHomeScreen> {
         ),
       ],
     );
-  }
-
-  // ==================== LOGOUT ====================
-
-  Future<void> _handleLogout() async {
-    final shouldLogout = await showDialog<bool>(
-      context: context,
-      builder: (context) => AlertDialog(
-        title: const Text('Konfirmasi Logout'),
-        content: const Text('Apakah Anda yakin ingin keluar?'),
-        actions: [
-          TextButton(
-            onPressed: () => Navigator.pop(context, false),
-            child: const Text('BATAL'),
-          ),
-          TextButton(
-            onPressed: () => Navigator.pop(context, true),
-            style: TextButton.styleFrom(foregroundColor: AppTheme.error),
-            child: const Text('KELUAR'),
-          ),
-        ],
-      ),
-    );
-
-    if (shouldLogout == true && mounted) {
-      try {
-        await FirebaseAuth.instance.signOut();
-        if (!mounted) return;
-        Navigator.pushReplacementNamed(context, AppConstants.loginRoute);
-      } catch (e) {
-        if (mounted) {
-          ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(
-              content: Text('Gagal logout: $e'),
-              backgroundColor: AppTheme.error,
-            ),
-          );
-        }
-      }
-    }
   }
 }
