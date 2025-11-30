@@ -19,9 +19,6 @@ import 'core/constants/app_constants.dart';
 import 'screens/auth/login_screen.dart';
 import 'screens/auth/sign_up_screen.dart';
 
-// Dev Screen
-import 'screens/dev_navigation_screen.dart';
-
 // Employee Screens
 import 'screens/employee/employee_home_screen.dart';
 import 'screens/employee/create_report_screen.dart';
@@ -177,21 +174,10 @@ class MyApp extends StatelessWidget {
       locale: const Locale('id', 'ID'),
 
       // Initial route
-      // DEVELOPMENT MODE: Bypass login, langsung ke screen
-      // Pilih salah satu route di bawah untuk testing frontend:
-      initialRoute: '/dev', // 🛠️ DEV MENU (RECOMMENDED)
-      // initialRoute: AppConstants.loginRoute,           // Login Screen
-      // initialRoute: AppConstants.homeEmployeeRoute,    // Employee Home
-      // initialRoute: AppConstants.homeCleanerRoute,     // Cleaner Home
-      // initialRoute: AppConstants.homeAdminRoute,       // Admin Dashboard
-      // initialRoute: '/inventory',                      // Inventory Screen
-      // initialRoute: '/profile',                        // Profile Screen
-
       // Routes
-      routes: {
-        // ==================== DEVELOPMENT ====================
-        '/dev': (context) => const DevNavigationScreen(),
+      initialRoute: AppConstants.loginRoute,
 
+      routes: {
         // ==================== ROOT ====================
         '/': (context) => const LoginScreen(), // Add home/root route
         // ==================== AUTH ====================
