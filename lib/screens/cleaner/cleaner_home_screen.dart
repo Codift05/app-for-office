@@ -329,7 +329,7 @@ class _CleanerHomeScreenState extends ConsumerState<CleanerHomeScreen> {
 
   Widget _buildSpeedDial() {
     return CustomSpeedDial(
-      mainButtonColor: AppTheme.primary,
+      mainButtonColor: AppTheme.accent,
       actions: [
         // Inventaris Alat (Blue) - NEW!
         SpeedDialAction(

@@ -729,7 +729,7 @@ class _AdminDashboardScreenState extends ConsumerState<AdminDashboardScreen> {
   // ==================== SPEED DIAL ====================
   Widget _buildSpeedDial() {
     return CustomSpeedDial(
-      mainButtonColor: AppTheme.primary,
+      mainButtonColor: AppTheme.accent,
       actions: [
         SpeedDialAction(
           icon: Icons.verified_user,

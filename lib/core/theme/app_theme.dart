@@ -5,51 +5,52 @@ import 'package:flutter/material.dart';
 class AppTheme {
   // ==================== PALET WARNA UTAMA ====================
 
-  // Primary Colors (Fresh Mint Green - dari design reference)
-  static const Color primary = Color(0xFF5FD8A5); // Fresh mint green
-  static const Color primaryDark = Color(0xFF4AC694); // Darker mint
-  static const Color primaryLight = Color(0xFFE5F7F0); // Light mint
+  // Primary Colors (Teal/Dark Green - dari design reference)
+  static const Color primary = Color(0xFF2C5F5F); // Dark teal
+  static const Color primaryDark = Color(0xFF1E4343); // Darker teal
+  static const Color primaryLight = Color(0xFF3D7575); // Light teal
 
-  // Secondary/Accent Color
-  static const Color secondary = Color(0xFF5FC8E8); // Sky blue
-  static const Color accent = Color(0xFFFF8B8B); // Coral pink
+  // Secondary/Accent Color (Orange/Peach)
+  static const Color secondary = Color(0xFFF5A962); // Warm orange
+  static const Color accent = Color(0xFFF5A962); // Warm orange
+  static const Color accentLight = Color(0xFFFDD5A8); // Light orange
 
   // Status Colors
-  static const Color success = Color(0xFF4DD0A1); // Green mint
-  static const Color warning = Color(0xFFFFB84D); // Warm orange
-  static const Color error = Color(0xFFFF7B7B); // Soft red/coral
+  static const Color success = Color(0xFF4DD0A1); // Green
+  static const Color warning = Color(0xFFF5A962); // Orange
+  static const Color error = Color(0xFFE74C3C); // Red
   static const Color info = Color(0xFF5FC8E8); // Sky blue
 
   // Neutral Colors
-  static const Color background = Color(0xFFF4F6F8); // Abu-abu sangat muda
+  static const Color background = Color(0xFFF5F5F5); // Light gray
   static const Color card = Colors.white;
-  static const Color textPrimary = Color(0xFF212121); // Hampir hitam
-  static const Color textSecondary = Color(0xFF757575); // Abu-abu tua
-  static const Color textHint = Color(0xFFBDBDBD); // Abu-abu muda
-  static const Color divider = Color(0xFFE0E0E0);
+  static const Color textPrimary = Color(0xFF2C3E50); // Dark blue-gray
+  static const Color textSecondary = Color(0xFF7F8C8D); // Medium gray
+  static const Color textHint = Color(0xFFBDC3C7); // Light gray
+  static const Color divider = Color(0xFFECF0F1);
 
   // ==================== MODERN DASHBOARD COLORS ====================
 
-  // Header Gradient (Fresh mint)
-  static const Color headerGradientStart = Color(0xFF5FD8A5);
-  static const Color headerGradientEnd = Color(0xFF4AC694);
+  // Header Gradient (Teal)
+  static const Color headerGradientStart = Color(0xFF2C5F5F);
+  static const Color headerGradientEnd = Color(0xFF1E4343);
 
   // Stat Card Accent Colors
   static const Color blueAccent = Color(0xFF5FC8E8);
-  static const Color orangeAccent = Color(0xFFFFB84D);
+  static const Color orangeAccent = Color(0xFFF5A962);
   static const Color greenAccent = Color(0xFF4DD0A1);
-  static const Color purpleAccent = Color(0xFFB8A5E8);
+  static const Color purpleAccent = Color(0xFF9B8AC4);
 
-  // Chart Colors (Multi-color bars) - Fresh palette
-  static const Color chartPink = Color(0xFFFF8B8B);
-  static const Color chartPurple = Color(0xFFB8A5E8);
-  static const Color chartNavy = Color(0xFF5FC8E8);
-  static const Color chartMint = Color(0xFF5FD8A5);
-  static const Color chartYellow = Color(0xFFFFD88B);
-  static const Color chartOrange = Color(0xFFFFB84D);
+  // Chart Colors (Multi-color bars) - Modern palette
+  static const Color chartPink = Color(0xFFE88D8D);
+  static const Color chartPurple = Color(0xFF9B8AC4);
+  static const Color chartNavy = Color(0xFF2C5F5F);
+  static const Color chartTeal = Color(0xFF3D7575);
+  static const Color chartYellow = Color(0xFFFDD5A8);
+  static const Color chartOrange = Color(0xFFF5A962);
 
   // Modern Backgrounds
-  static const Color modernBg = Color(0xFFF9FAFB); // Lighter gray
+  static const Color modernBg = Color(0xFFF5F5F5); // Light gray
   static const Color cardBg = Colors.white;
 
   // Shadow helper

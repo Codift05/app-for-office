@@ -83,7 +83,12 @@ class WeeklyReportChart extends StatelessWidget {
               getTooltipItem: (group, groupIndex, rod, rodIndex) {
                 final day = days[group.x.toInt()];
                 final data = weeklyData[day]!;
-                final statusNames = ['Pending', 'Sedang Dikerjakan', 'Selesai', 'Perlu Verifikasi'];
+                final statusNames = [
+                  'Pending',
+                  'Sedang Dikerjakan',
+                  'Selesai',
+                  'Perlu Verifikasi',
+                ];
                 final values = data.values.toList();
 
                 return BarTooltipItem(
@@ -119,7 +124,8 @@ class WeeklyReportChart extends StatelessWidget {
               sideTitles: SideTitles(
                 showTitles: true,
                 getTitlesWidget: (value, meta) {
-                  if (value.toInt() >= days.length) return const SizedBox.shrink();
+                  if (value.toInt() >= days.length)
+                    return const SizedBox.shrink();
                   return Padding(
                     padding: const EdgeInsets.only(top: 8),
                     child: Text(
@@ -157,10 +163,7 @@ class WeeklyReportChart extends StatelessWidget {
             show: true,
             drawVerticalLine: false,
             getDrawingHorizontalLine: (value) {
-              return FlLine(
-                color: AppTheme.divider,
-                strokeWidth: 1,
-              );
+              return FlLine(color: AppTheme.divider, strokeWidth: 1);
             },
           ),
           barGroups: _buildBarGroups(weeklyData, days),
@@ -200,7 +203,7 @@ class WeeklyReportChart extends StatelessWidget {
           ),
           BarChartRodData(
             toY: data['completed']!.toDouble(),
-            color: AppTheme.chartMint,
+            color: AppTheme.chartTeal,
             width: isDesktop ? 12 : 10,
             borderRadius: const BorderRadius.only(
               topLeft: Radius.circular(4),
@@ -236,17 +239,14 @@ class WeeklyReportChart extends StatelessWidget {
 class WeeklyReportChartLegend extends StatelessWidget {
   final bool isHorizontal;
 
-  const WeeklyReportChartLegend({
-    super.key,
-    this.isHorizontal = true,
-  });
+  const WeeklyReportChartLegend({super.key, this.isHorizontal = true});
 
   @override
   Widget build(BuildContext context) {
     final items = [
       _LegendItem(color: AppTheme.chartPink, label: 'Pending'),
       _LegendItem(color: AppTheme.chartNavy, label: 'Sedang Dikerjakan'),
-      _LegendItem(color: AppTheme.chartMint, label: 'Selesai'),
+      _LegendItem(color: AppTheme.chartTeal, label: 'Selesai'),
       _LegendItem(color: AppTheme.chartYellow, label: 'Perlu Verifikasi'),
     ];
 
@@ -260,10 +260,14 @@ class WeeklyReportChartLegend extends StatelessWidget {
     } else {
       return Column(
         crossAxisAlignment: CrossAxisAlignment.start,
-        children: items.map((item) => Padding(
-          padding: const EdgeInsets.only(bottom: 8),
-          child: item,
-        )).toList(),
+        children: items
+            .map(
+              (item) => Padding(
+                padding: const EdgeInsets.only(bottom: 8),
+                child: item,
+              ),
+            )
+            .toList(),
       );
     }
   }
@@ -273,10 +277,7 @@ class _LegendItem extends StatelessWidget {
   final Color color;
   final String label;
 
-  const _LegendItem({
-    required this.color,
-    required this.label,
-  });
+  const _LegendItem({required this.color, required this.label});
 
   @override
   Widget build(BuildContext context) {
